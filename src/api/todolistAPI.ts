@@ -44,6 +44,21 @@ export const todolistAPI = {
     }
 
 }
+export const authAPI = {
+    async login(data: LoginType) {
+        const result = await instance.post<DataType<{userId?:string}>>('/auth/login', data)
+        return result.data
+    },
+    async logOut() {
+        const result = await instance.delete<DataType<{}>>('/auth/login')
+        return result.data
+    },
+    async authMe() {
+        const result = await instance.get<DataType<{email:string}>>('/auth/me')
+        return result.data
+    }
+
+}
 // type
 export type TodolistType = {
     id: string
@@ -75,3 +90,9 @@ type GetTaskType = {
     totalCount: number
 }
 
+export type LoginType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
+}

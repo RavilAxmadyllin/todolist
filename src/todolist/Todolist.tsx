@@ -4,10 +4,10 @@ import {EditableSpan} from '../components/EditableSpan'
 import {Button, IconButton} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
 import {Task} from './Task'
-import {FilterValuesType, TodolistDomainType} from '../state/todolists-reducer';
+import {FilterValuesType, TodolistDomainType} from '../store/todolists-reducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {createTask, deleteTask, setTasks, TasksStateType, updateTask} from '../state/tasks-reducer';
-import {AppRootStateType} from '../state/store';
+import {createTask, deleteTask, setTasks, TasksStateType, updateTask} from '../store/tasks-reducer';
+import {AppRootStateType} from '../store/store';
 
 
 type PropsType = {
@@ -60,12 +60,12 @@ export const Todolist = React.memo(({todolist, ...props}: PropsType) => {
     }
 
     return <div>
-        <h3><EditableSpan value={todolist.title} onChange={changeTodolistTitle}/>
-            <IconButton onClick={removeTodolist}>
+        <h3><EditableSpan value={todolist.title} onChange={changeTodolistTitle} />
+            <IconButton onClick={removeTodolist} disabled={todolist.entityStatus}>
                 <Delete/>
             </IconButton>
         </h3>
-        <AddItemForm addItem={addTask}/>
+        <AddItemForm addItem={addTask} disabled={todolist.entityStatus}/>
         <div>
             {
                 tasks.map(t => <Task key={t.id} task={t}
