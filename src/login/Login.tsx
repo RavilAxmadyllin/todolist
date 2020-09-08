@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {useFormik} from 'formik';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginThunk} from '../store/login-reducer';
 import {AppRootStateType} from '../store/store';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 export const Login = () => {
     const isAuth = useSelector( (state: AppRootStateType) => state.auth.isAuth)

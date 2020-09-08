@@ -1,14 +1,12 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import './App.css';
-import {AddItemForm} from './components/AddItemForm';
-import {AppBar, Button, Container, Grid, IconButton, LinearProgress, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, Button, Container, IconButton, LinearProgress, Toolbar} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
-import {addTodolistThunk} from './store/todolists-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {TodolistsList} from './todolist/TodolistsList';
 import {AppRootStateType} from './store/store';
-import { ErrorSnackbar } from './components/ErrorSnackBar';
-import { Route } from 'react-router-dom';
+import {ErrorSnackbar} from './components/ErrorSnackBar';
+import {Route} from 'react-router-dom';
 import {Login} from './login/Login';
 import {isAuth, logOut} from './store/login-reducer';
 import {initialAppState} from './store/app-reducer';
@@ -17,11 +15,10 @@ import {initialAppState} from './store/app-reducer';
 function AppWithRedux() {
     const init = useSelector((state:AppRootStateType) => state.app.initialApp)
     const status = useSelector((state:AppRootStateType) => state.app.status)
-    const auth = useSelector((state:AppRootStateType) => state.auth.isAuth)
     const dispatch = useDispatch()
     useEffect( () => {
         dispatch(initialAppState())
-    },[])
+    },[dispatch])
     const logoutHandler = () => {
         dispatch(logOut())
     }

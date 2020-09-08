@@ -18,7 +18,6 @@ type PropsType = {
 }
 
 export const Todolist = React.memo(({todolist, ...props}: PropsType) => {
-    console.log('Todolist called')
     let allTasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch()
     useEffect(() => {

@@ -25,7 +25,7 @@ export const TodolistsList = () => {
         if (isAuth) {
             dispatch(setTodolists())
         }
-    }, [dispatch])
+    }, [dispatch, isAuth])
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
         dispatch(changeTodolistFilter(todolistId, value));
     }, [dispatch]);
