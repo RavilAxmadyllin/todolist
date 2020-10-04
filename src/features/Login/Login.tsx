@@ -1,15 +1,20 @@
 import React from 'react'
-import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
-import {useFormik} from 'formik'
-import {useDispatch, useSelector} from 'react-redux'
-import {loginTC} from './auth-reducer'
-import {AppRootStateType} from '../../app/store'
-import { Redirect } from 'react-router-dom'
+import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
+import {FormikHelpers, useFormik} from 'formik'
+import {useSelector} from 'react-redux'
+import {login} from './auth-reducer'
+import {AppRootStateType, useAppDispatch} from '../../app/store'
+import {Redirect} from 'react-router-dom'
 
+type FormValueType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
 export const Login = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const formik = useFormik({
         validate: (values) => {
@@ -30,20 +35,47 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
-        onSubmit: values => {
-            dispatch(loginTC(values));
-        },
+        onSubmit: async (values, formikHelpers: FormikHelpers<FormValueType>) => {
+            const result = await dispatch(login(values))
+            if (login.rejected.match(result)) {
+                if (result.payload?.fieldsErrors?.length) {
+                    const err = result.payload?.fieldsErrors[0]
+                    formikHelpers.setFieldError(err.field, err.error)
+                }
+            }
+        }
     })
 
     if (isLoggedIn) {
-        return <Redirect to={"/"} />
+        return <Redirect to={'/'}/>
     }
-
-
     return <Grid container justify="center">
         <Grid item xs={4}>
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
+                    <FormGroup>
+                        <TextField
+                            label="Email"
+                            margin="normal"
+                            {...formik.getFieldProps('email')}
+                        />
+                        {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+                        <TextField
+                            type="password"
+                            label="Password"
+                            margin="normal"
+                            {...formik.getFieldProps('password')}
+                        />
+                        {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+                        <FormControlLabel
+                            label={'Remember me'}
+                            control={<Checkbox
+                                {...formik.getFieldProps('rememberMe')}
+                                checked={formik.values.rememberMe}
+                            />}
+                        />
+                        <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
+                    </FormGroup>
                     <FormLabel>
                         <p>
                             To log in get registered <a href={'https://social-network.samuraijs.com/'}
@@ -58,29 +90,6 @@ export const Login = () => {
                             Password: free
                         </p>
                     </FormLabel>
-                    <FormGroup>
-                        <TextField
-                            label="Email"
-                            margin="normal"
-                            {...formik.getFieldProps("email")}
-                        />
-                        {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-                        <TextField
-                            type="password"
-                            label="Password"
-                            margin="normal"
-                            {...formik.getFieldProps("password")}
-                        />
-                        {formik.errors.password ? <div>{formik.errors.password}</div> : null}
-                        <FormControlLabel
-                            label={'Remember me'}
-                            control={<Checkbox
-                                {...formik.getFieldProps("rememberMe")}
-                                checked={formik.values.rememberMe}
-                            />}
-                        />
-                        <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
-                    </FormGroup>
                 </FormControl>
             </form>
         </Grid>
