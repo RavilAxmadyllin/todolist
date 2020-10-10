@@ -9,7 +9,7 @@ export default {
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': 'ef3df34b-f620-4141-98a4-941ac190a9df'
+        'API-KEY': '1cdd9f77-c60e-4af5-b194-659e4ebd5d41'
     }
 }
 
@@ -71,8 +71,8 @@ export const GetTasks = () => {
 
     const getTasks = () => {
         todolistsAPI.getTasks(todolistId)
-            .then((data) => {
-                setState(data)
+            .then((res) => {
+                setState(res.data)
             })
     }
 
